@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHIZOR V8 - Clinical Prescription System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loader"></div>
+            <h2>SHIZOR V8</h2>
+            <p>Final Production Release - All Features Complete &amp; Auto-Populating...</p>
+            <div id="loadingStatus">Initializing system...</div>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="app-container" style="display: none;">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <h1>SHIZOR V8 - Clinical Prescription System</h1>
+            <p>Final Production Release - Clean Code, Auto-Population, Real Data ✓</p>
+        </header>
+
+        <!-- Patient Information -->
+        <section class="section-card">
+            <h2 class="section-title">Patient Information</h2>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label required">Patient Name</label>
+                    <input type="text" id="patientName" class="form-control" placeholder="Enter full name" required>
+                    <span class="error-message" id="errorPatientName"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Age</label>
+                    <input type="number" id="patientAge" class="form-control" placeholder="Age" min="1" max="150" required>
+                    <span class="error-message" id="errorPatientAge"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Sex</label>
+                    <select id="patientSex" class="form-control" required>
+                        <option value="">Select Sex</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                    <span class="error-message" id="errorPatientSex"></span>
+                </div>
+                <div class="form-group">
+                    <label class="form-label required">Date</label>
+                    <input type="date" id="patientDate" class="form-control" required>
+                    <span class="error-message" id="errorPatientDate"></span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Medical History -->
+        <section class="section-card">
+            <h2 class="section-title">Medical History</h2>
+            
+            <div class="form-group">
+                <label class="form-label required">C/o (Chief Complaint)</label>
+                <textarea id="chiefComplaint" class="form-control" rows="4" placeholder="Enter chief complaint..." required></textarea>
+                <span class="error-message" id="errorChiefComplaint"></span>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Symptoms <span class="badge-info">Auto-matches acupuncture points</span></label>
+                <div class="search-box">
+                    <input type="text" id="symptomSearch" class="form-control" placeholder="Type to search symptoms..." autocomplete="off">
+                    <div id="symptomDropdown" class="dropdown-menu"></div>
+                </div>
+                <div id="selectedSymptoms" class="tag-container"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Select Diseases <span class="badge-info">Auto-matches acupuncture points</span></label>
+                <div class="search-box">
+                    <input type="text" id="diseaseSearch" class="form-control" placeholder="Type to search diseases..." autocomplete="off">
+                    <div id="diseaseDropdown" class="dropdown-menu"></div>
+                </div>
+                <div id="selectedDiseases" class="tag-container"></div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">H/o (History of)</label>
+                <textarea id="historyOf" class="form-control" rows="3" placeholder="Enter medical history (optional)..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">P/H/o (Past History of)</label>
+                <textarea id="pastHistory" class="form-control" rows="3" placeholder="Enter past medical history (optional)..."></textarea>
+            </div>
+        </section>
+
+        <!-- Diagnostic Tests -->
+        <section class="section-card">
+            <h2 class="section-title">Diagnostic Tests Required</h2>
+            
+            <div class="form-group">
+                <label class="form-label">Search Tests</label>
+                <div class="search-box">
+                    <input type="text" id="testSearch" class="form-control" placeholder="Search diagnostic tests..." autocomplete="off">
+                    <div id="testDropdown" class="dropdown-menu"></div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Or Add Custom Test</label>
+                <div class="input-group">
+                    <input type="text" id="customTest" class="form-control" placeholder="Enter custom test name">
+                    <button type="button" class="btn btn-secondary" onclick="addCustomTest()">Add Custom</button>
+                </div>
+            </div>
+
+            <div id="testList" class="item-list"></div>
+        </section>
+
+        <!-- Clinical Notes -->
+        <section class="section-card">
+            <h2 class="section-title">Additional Clinical Notes</h2>
+            <div class="form-group">
+                <textarea id="clinicalNotes" class="form-control" rows="4" placeholder="Enter any additional clinical observations or notes (optional)..."></textarea>
+            </div>
+        </section>
+
+        <!-- RX Prescription -->
+        <section class="section-card">
+            <h2 class="section-title">RX - Prescription</h2>
+            
+            <!-- Treatment Specifics -->
+            <div class="subsection">
+                <h3 class="subsection-title">Treatment Plan &amp; Specifics</h3>
+                <textarea id="treatmentPlan" class="form-control" rows="4" placeholder="Enter treatment instructions and plan (optional)..."></textarea>
+            </div>
+
+            <!-- Medicine Prescription -->
+            <div class="subsection">
+                <h3 class="subsection-title">Medicine Prescription - Database Search</h3>
+                <div class="medicine-search">
+                    <div class="form-grid">
+                        <select id="medCategory" class="form-control">
+                            <option value="">Select Category</option>
+                        </select>
+                        <select id="medSubcategory" class="form-control" disabled>
+                            <option value="">Select Subcategory</option>
+                        </select>
+                        <div class="search-box">
+                            <input type="text" id="medSaltSearch" class="form-control" placeholder="Search by Salt Name..." disabled>
+                            <div id="medSaltDropdown" class="dropdown-menu"></div>
+                        </div>
+                        <button type="button" class="btn btn-primary" onclick="addMedicine()" id="addMedicineBtn" disabled>Add Medicine</button>
+                    </div>
+                    <div id="medicineDetails" class="medicine-details"></div>
+                </div>
+                
+                <!-- Manual Medicine Add -->
+                <div class="manual-medicine-section">
+                    <h4 class="subsection-title">Add Custom Medicine</h4>
+                    <div class="form-grid">
+                        <input type="text" id="customMedName" class="form-control" placeholder="Medicine Name">
+                        <input type="text" id="customMedMorning" class="form-control" placeholder="Morning dose">
+                        <input type="text" id="customMedAfternoon" class="form-control" placeholder="Afternoon dose">
+                        <input type="text" id="customMedEvening" class="form-control" placeholder="Evening dose">
+                        <input type="text" id="customMedNight" class="form-control" placeholder="Night dose">
+                        <button type="button" class="btn btn-secondary" onclick="addCustomMedicine()">Add Custom Medicine</button>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="data-table" id="medicineTable">
+                        <thead>
+                            <tr>
+                                <th>Generic Name</th>
+                                <th>Salt Name</th>
+                                <th>Brand Name</th>
+                                <th>Morning</th>
+                                <th>Afternoon</th>
+                                <th>Evening</th>
+                                <th>Night</th>
+                                <th>Drug Interaction</th>
+                                <th>Rx Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="medicineTableBody">
+                            <tr><td colspan="10" class="empty-message">No medicines added yet</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Acupuncture Points - 4 Tables -->
+            <div class="subsection">
+                <h3 class="subsection-title">Acupuncture Points Treatment Plan</h3>
+                
+                <!-- Table 1: Body Points by Symptoms -->
+                <div class="acupuncture-table-section">
+                    <h4 class="table-header">Body Acupuncture Points - Matched by SYMPTOMS <span id="bodySymptomCount" class="count-badge">0 points</span></h4>
+                    <div id="bodySymptomTable" class="points-table-container"></div>
+                </div>
+                
+                <div class="separator-clear"></div>
+                
+                <!-- Table 2: Ear Points by Symptoms -->
+                <div class="acupuncture-table-section">
+                    <h4 class="table-header">Ear Acupuncture Points - Matched by SYMPTOMS <span id="earSymptomCount" class="count-badge">0 points</span></h4>
+                    <div id="earSymptomTable" class="points-table-container"></div>
+                </div>
+                
+                <div class="separator-major"></div>
+                
+                <!-- Table 3: Body Points by Diseases -->
+                <div class="acupuncture-table-section">
+                    <h4 class="table-header">Body Acupuncture Points - Matched by DISEASES <span id="bodyDiseaseCount" class="count-badge">0 points</span></h4>
+                    <div id="bodyDiseaseTable" class="points-table-container"></div>
+                </div>
+                
+                <div class="separator-clear"></div>
+                
+                <!-- Table 4: Ear Points by Diseases -->
+                <div class="acupuncture-table-section">
+                    <h4 class="table-header">Ear Acupuncture Points - Matched by DISEASES <span id="earDiseaseCount" class="count-badge">0 points</span></h4>
+                    <div id="earDiseaseTable" class="points-table-container"></div>
+                </div>
+                
+                <!-- Optional Manual Search -->
+                <div class="manual-search-section">
+                    <h4 class="table-header">Optional: Manually Add More Points</h4>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Search Body Points</label>
+                            <div class="search-box">
+                                <input type="text" id="bodyPointSearch" class="form-control" placeholder="Search body acupuncture points..." autocomplete="off">
+                                <div id="bodyPointDropdown" class="dropdown-menu"></div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Search Ear Points</label>
+                            <div class="search-box">
+                                <input type="text" id="earPointSearch" class="form-control" placeholder="Search ear acupuncture points..." autocomplete="off">
+                                <div id="earPointDropdown" class="dropdown-menu"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Generate PDF -->
+        <section class="action-section">
+            <button type="button" class="btn btn-generate" onclick="generatePrescriptionPDF()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="12" y1="18" x2="12" y2="12"></line>
+                    <line x1="9" y1="15" x2="15" y2="15"></line>
+                </svg>
+                Generate &amp; Download Prescription PDF
+            </button>
+        </section>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <p>Designed by <strong>SHIZOR</strong> - V8 Final Production Release - All Features Complete</p>
+        </footer>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.0/jspdf.plugin.autotable.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
